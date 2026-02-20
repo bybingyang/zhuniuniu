@@ -288,12 +288,13 @@ body {
 
 /* ===== 控制区 ===== */
 #controls {
-  padding: 10px 20px;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 8px;
+  padding: 12px 20px 16px;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  gap: 10px;
 }
-#status-msg { font-size: 13px; color: var(--muted); }
-#action-btns { display: flex; gap: 8px; }
+#status-msg { font-size: 13px; color: var(--muted); text-align: center; }
+#action-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 
 .btn {
   padding: 8px 18px; border-radius: 8px; border: none;
