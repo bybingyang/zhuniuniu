@@ -352,12 +352,12 @@ body {
   margin-bottom: 14px;
 }
 .log-history-session-header {
-  font-size: 11px; color: #4a5568;
-  border-left: 2px solid #2d3748;
+  font-size: 11px; color: var(--muted);
+  border-left: 2px solid var(--border);
   padding-left: 8px; margin-bottom: 6px;
 }
 .log-history-session .log-round-block {
-  border-left-color: #2d3748;
+  border-left-color: var(--border);
   opacity: .7;
 }
 
