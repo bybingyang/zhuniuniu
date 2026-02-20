@@ -95,7 +95,12 @@
     </div>
   </div>
 
-  <div id="game-log"></div>
+  <div id="log-panel">
+    <div class="log-section-title">📋 本次游戏记录</div>
+    <div class="log-current-wrap" id="log-current"></div>
+    <div class="log-section-title">📂 历史记录（最近 3 次）</div>
+    <div class="log-history-wrap" id="log-history"></div>
+  </div>
 </div>
 
 <!-- ===== 积分手动修改 ===== -->
@@ -115,10 +120,19 @@
 
 <!-- ===== 游戏结束 ===== -->
 <div id="game-over" class="hidden">
-  <div class="go-box">
-    <h2 id="go-title">游戏结束</h2>
-    <div id="go-ranks"></div>
-    <button class="btn-start" onclick="location.reload()">再来一局</button>
+  <div class="picker-backdrop" onclick=""></div>
+  <div class="picker-box go-box">
+    <div class="picker-header">
+      <h2 id="go-title" style="font-size:18px;color:var(--gold)">游戏结束</h2>
+    </div>
+    <div style="padding:16px 20px;overflow-y:auto;max-height:75vh;display:flex;flex-direction:column;gap:14px;">
+      <div id="go-ranks"></div>
+      <div class="go-log-title">📋 完整记录</div>
+      <div id="go-log"></div>
+    </div>
+    <div class="picker-footer">
+      <button class="btn-start" style="padding:10px 24px;font-size:14px" onclick="location.reload()">再来一局</button>
+    </div>
   </div>
 </div>
 
