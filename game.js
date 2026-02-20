@@ -104,6 +104,7 @@ const G = {
   phase:         'ready',   // 就绪 | 发牌中 | 已结算
   round:         0,
   log:           [],
+  roundLogs:     [],   // 当前 session 按局日志: [{round,dealer,entries[]}]
 };
 
 function mkPlayer(id, name, chips) {
@@ -175,6 +176,9 @@ function compareNiuNiu(pA, pB) {
 function startRound() {
   if (G.phase === 'dealing') return;   // 防止发牌动画期间重复触发
   G.round++;
+  // 新建当轮日志对象
+  G.roundLogs.push({ round: G.round, dealer: G.players[G.dealerIdx].name, entries: [] });
+
   G.phase = 'dealing';
   el('round-info').textContent = `第 ${G.round} 局`;
   el('phase-label').textContent = '发牌中…';
@@ -434,7 +438,14 @@ function el(id)      { return document.getElementById(id); }
 function show(id)    { const e = el(id); if (e) e.style.display = 'inline-flex'; }
 function hide(id)    { const e = el(id); if (e) e.style.display = 'none'; }
 function setStatus(t){ const e = el('status-msg'); if (e) e.textContent = t; }
-function addLog(msg) { G.log.unshift(msg); if (G.log.length > 20) G.log.pop(); }
+function addLog(msg) {
+  G.log.unshift(msg);
+  if (G.log.length > 100) G.log.pop();
+  // 双写到当前局日志（时间顺序）
+  if (G.roundLogs.length > 0) {
+    G.roundLogs[G.roundLogs.length - 1].entries.push(msg);
+  }
+}
 function esc(s)      {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
                   .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
