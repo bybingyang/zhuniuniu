@@ -83,6 +83,7 @@ function lb_start() {
   G.round     = 0;
   G.log       = [];
   G.roundLogs = [];
+  G.sessionId = Date.now().toString(36);  // 唯一 session 标识
   G.players[0].isDealer = true;
 
   el('lobby').classList.add('hidden');
@@ -106,6 +107,7 @@ const G = {
   round:         0,
   log:           [],
   roundLogs:     [],   // 当前 session 按局日志: [{round,dealer,entries[]}]
+  sessionId:     null, // 本次游戏唯一 ID，lb_start() 时生成
 };
 
 function mkPlayer(id, name, chips) {
@@ -459,12 +461,13 @@ const HISTORY_MAX = 3;
 function saveSessionHistory() {
   try {
     const item = {
+      sessionId: G.sessionId,
       date: new Date().toLocaleString('zh-CN', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' }),
       rounds: G.roundLogs.slice()
     };
     let history = loadSessionHistory();
-    // 如果最近一次 date 相同则替换（同一 session 多次保存）
-    if (history.length > 0 && history[0].date === item.date) {
+    // 同一 sessionId 时替换（同一局游戏多次结算更新）
+    if (history.length > 0 && history[0].sessionId === item.sessionId) {
       history[0] = item;
     } else {
       history.unshift(item);
@@ -476,7 +479,8 @@ function saveSessionHistory() {
 
 function loadSessionHistory() {
   try {
-    return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+    const data = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+    return Array.isArray(data) ? data : [];
   } catch(e) { return []; }
 }
 
