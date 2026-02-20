@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>朱牛牛 · 现场记分器</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== 大厅 ===== -->
+<div id="lobby">
+  <div class="lobby-inner">
+    <h1 class="game-title">朱牛牛</h1>
+    <p class="game-sub">Niu Niu · 现场记分器</p>
+
+    <div class="lobby-section">
+      <div class="lobby-section-title">
+        <span>玩家列表</span>
+        <button class="btn-add-player" onclick="lb_addRow()">＋ 添加玩家</button>
+      </div>
+      <div class="lb-header">
+        <span>#</span><span>姓名</span><span>初始积分</span><span></span>
+      </div>
+      <div id="player-list"></div>
+    </div>
+
+    <div class="lobby-section">
+      <div class="lobby-section-title">游戏设置</div>
+      <div class="form-row">
+        <label>底注（分）</label>
+        <input id="lb-bet" type="number" value="100" min="1" step="10">
+      </div>
+      <div class="form-row">
+        <label>牛牛 倍率</label>
+        <input id="lb-mult-niuniu" type="number" value="4" min="1" step="1">
+      </div>
+      <div class="form-row">
+        <label>牛九 倍率</label>
+        <input id="lb-mult-niu9" type="number" value="3" min="1" step="1">
+      </div>
+      <div class="form-row">
+        <label>牛八 倍率</label>
+        <input id="lb-mult-niu8" type="number" value="2" min="1" step="1">
+      </div>
+    </div>
+
+    <button class="btn-start" onclick="lb_start()">开始游戏</button>
+
+    <div class="rules-hint">
+      <b>牛牛×4</b> &nbsp; <b>牛九×3</b> &nbsp; <b>牛八×2</b> &nbsp; 其余×1
+      &nbsp;｜&nbsp; 牛牛自动换庄
+    </div>
+  </div>
+</div>
+
+<!-- ===== 游戏界面 ===== -->
+<div id="game-wrapper" class="hidden">
+
+  <div id="top-bar">
+    <div class="tb-left">
+      <span class="tb-title">朱牛牛</span>
+      <span id="round-info">第 1 局</span>
+      <span id="dealer-info"></span>
+    </div>
+    <div class="tb-right">
+      <span id="phase-label"></span>
+      <button class="btn btn-endgame" onclick="UI.showGameOver()">结束游戏</button>
+      <button class="btn btn-exit"
+              onclick="if(confirm('退出并返回大厅？'))location.reload()">退出</button>
+    </div>
+  </div>
+
+  <div id="scorecard-wrap">
+    <table id="scorecard">
+      <thead>
+        <tr>
+          <th class="col-name">玩家</th>
+          <th class="col-cards">手牌</th>
+          <th class="col-type">牌型</th>
+          <th class="col-delta">本局</th>
+          <th class="col-chips">积分</th>
+        </tr>
+      </thead>
+      <tbody id="score-body"></tbody>
+    </table>
+  </div>
+
+  <div id="controls">
+    <div id="status-msg"></div>
+    <div id="action-btns">
+      <button class="btn btn-deal"   id="btn-deal"   onclick="startRound()" style="display:none">发  牌</button>
+      <button class="btn btn-next"   id="btn-next"   onclick="nextRound()"  style="display:none">下一局 ▶</button>
+      <button class="btn btn-scores" id="btn-scores" onclick="UI.showScoreEdit()" style="display:none">✎ 修改积分</button>
+    </div>
+  </div>
+
+  <div id="game-log"></div>
+</div>
+
+<!-- ===== 积分手动修改 ===== -->
+<div id="score-editor" class="hidden">
+  <div class="picker-backdrop" onclick="UI.closeScoreEdit()"></div>
+  <div class="picker-box score-edit-box">
+    <div class="picker-header">
+      <span>修改积分</span>
+      <button class="picker-close" onclick="UI.closeScoreEdit()">✕</button>
+    </div>
+    <div id="score-edit-list"></div>
+    <div class="picker-footer">
+      <button class="btn btn-next" onclick="UI.saveScoreEdit()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 游戏结束 ===== -->
+<div id="game-over" class="hidden">
+  <div class="go-box">
+    <h2 id="go-title">游戏结束</h2>
+    <div id="go-ranks"></div>
+    <button class="btn-start" onclick="location.reload()">再来一局</button>
+  </div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
