@@ -97,12 +97,13 @@ function lb_start() {
 //  游戏状态
 // ============================================================
 const G = {
-  players:    [],
-  baseBet:    100,
-  dealerIdx:  0,
-  phase:      'ready',   // 就绪 | 发牌中 | 已结算
-  round:      0,
-  log:        [],
+  players:       [],
+  baseBet:       100,
+  dealerIdx:     0,
+  prevDealerIdx: null,   // 本局庄家 idx（结算后保留，用于双标签展示）
+  phase:         'ready',   // 就绪 | 发牌中 | 已结算
+  round:         0,
+  log:           [],
 };
 
 function mkPlayer(id, name, chips) {
@@ -181,6 +182,7 @@ function startRound() {
   setStatus('发牌中，请稍候…');
 
   // 重置
+  G.prevDealerIdx = null;
   for (const p of G.players) {
     p.hand = []; p.result = null; p.chipChange = 0; p.roundResult = '';
   }
@@ -253,6 +255,7 @@ function settle() {
   // 3. 换庄规则：只有出现牛牛才换庄
   //    - 有牛牛：所有牛牛玩家中，按最大单张比大小，最大者成为新庄家
   //    - 无牛牛：庄家不变
+  G.prevDealerIdx = G.dealerIdx;   // 记录本局庄家，供双标签展示
   const niuNiuPlayers = G.players.filter(p => p.result.rank === 10);
 
   if (niuNiuPlayers.length > 0) {
@@ -302,8 +305,21 @@ const UI = {
   buildRow(p) {
     const rowCls = p.roundResult ? `row-${p.roundResult}` : '';
 
-    // 玩家名
-    const badge  = p.isDealer ? '<span class="dealer-tag">庄</span>' : '';
+    // 玩家名：结算阶段显示双标签（本局庄/下局庄），其余阶段显示普通庄标签
+    let badge = '';
+    if (G.phase === 'settled') {
+      const isPrev = p.id === G.prevDealerIdx;
+      const isNext = p.id === G.dealerIdx;
+      if (isPrev && isNext) {
+        badge = '<span class="dealer-tag">连庄</span>';
+      } else if (isPrev) {
+        badge = '<span class="dealer-tag dealer-tag-prev">本局庄</span>';
+      } else if (isNext) {
+        badge = '<span class="dealer-tag dealer-tag-next">下局庄</span>';
+      }
+    } else {
+      badge = p.isDealer ? '<span class="dealer-tag">庄</span>' : '';
+    }
     const nameTd = `<td class="col-name"><div class="player-name-cell">${badge}${esc(p.name)}</div></td>`;
 
     // 手牌

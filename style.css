@@ -209,6 +209,8 @@ body {
   padding: 1px 5px; border-radius: 4px;
   flex-shrink: 0;
 }
+.dealer-tag-prev { background: #f97316; color: #fff; }  /* 本局庄：橙色 */
+.dealer-tag-next { background: #3b82f6; color: #fff; }  /* 下局庄：蓝色 */
 
 /* 手牌格子 */
 .hand-cards { display: flex; gap: 4px; flex-wrap: nowrap; }
