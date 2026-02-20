@@ -180,7 +180,7 @@ function startRound() {
   if (G.phase === 'dealing') return;   // 防止发牌动画期间重复触发
   G.round++;
   // 新建当轮日志对象
-  G.roundLogs.push({ round: G.round, dealer: G.players[G.dealerIdx].name, entries: [] });
+  G.roundLogs.push({ round: G.round, dealer: G.players[G.dealerIdx].name, baseBet: G.baseBet, entries: [] });
 
   G.phase = 'dealing';
   el('round-info').textContent = `第 ${G.round} 局`;
@@ -193,9 +193,6 @@ function startRound() {
   for (const p of G.players) {
     p.hand = []; p.result = null; p.chipChange = 0; p.roundResult = '';
   }
-
-  addLog(`第 ${G.round} 局 · 庄: ${G.players[G.dealerIdx].name} · 底注: ${G.baseBet}`);
-  UI.renderLog();
 
   // 洗牌 → 逐人单独发 5 张（每人间隔 420ms）
   const deck = shuffle(createDeck());
@@ -414,6 +411,7 @@ const UI = {
     UI.render();
     addLog('✎ 积分已手动调整');
     UI.renderLog();
+    saveSessionHistory();
   },
 
   showGameOver() {
@@ -436,7 +434,7 @@ const UI = {
       ? '<p style="font-size:12px;color:#3d4f6a;padding:8px 0">暂无记录</p>'
       : rounds.map(r => `
           <div class="log-round-block">
-            <div class="log-round-header">第 ${r.round} 局 · 庄: ${esc(r.dealer)}</div>
+            <div class="log-round-header">第 ${r.round} 局 · 庄: ${esc(r.dealer)} · 底注: ${r.baseBet}</div>
             ${r.entries.map(e => `<span class="log-entry">${esc(e)}</span>`).join('')}
           </div>`).join('');
 
@@ -449,7 +447,7 @@ const UI = {
             <div class="log-history-session-header">${esc(session.date)}</div>
             ${(session.rounds || []).slice().reverse().map(r => `
               <div class="log-round-block">
-                <div class="log-round-header">第 ${r.round} 局 · 庄: ${esc(r.dealer)}</div>
+                <div class="log-round-header">第 ${r.round} 局 · 庄: ${esc(r.dealer)} · 底注: ${r.baseBet || ''}</div>
                 ${(r.entries || []).map(e => `<span class="log-entry">${esc(e)}</span>`).join('')}
               </div>`).join('')}
           </div>`).join('');
