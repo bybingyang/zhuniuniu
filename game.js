@@ -430,8 +430,29 @@ const UI = {
   },
 
   renderLog() {
-    el('game-log').innerHTML = G.log.slice(0, 8)
-      .map(m => `<span>${esc(m)}</span>`).join('');
+    // --- 本次游戏记录（当前 session，按局逆序展示）---
+    const rounds = G.roundLogs.slice().reverse();  // 新局在上
+    el('log-current').innerHTML = rounds.length === 0
+      ? '<p style="font-size:12px;color:#3d4f6a;padding:8px 0">暂无记录</p>'
+      : rounds.map(r => `
+          <div class="log-round-block">
+            <div class="log-round-header">第 ${r.round} 局 · 庄: ${esc(r.dealer)}</div>
+            ${r.entries.map(e => `<span class="log-entry">${esc(e)}</span>`).join('')}
+          </div>`).join('');
+
+    // --- 历史记录（localStorage 最近 3 次 session）---
+    const history = loadSessionHistory();
+    el('log-history').innerHTML = history.length === 0
+      ? '<p style="font-size:12px;color:#3d4f6a;padding:8px 0">暂无历史</p>'
+      : history.map(session => `
+          <div class="log-history-session">
+            <div class="log-history-session-header">${esc(session.date)}</div>
+            ${(session.rounds || []).slice().reverse().map(r => `
+              <div class="log-round-block">
+                <div class="log-round-header">第 ${r.round} 局 · 庄: ${esc(r.dealer)}</div>
+                ${(r.entries || []).map(e => `<span class="log-entry">${esc(e)}</span>`).join('')}
+              </div>`).join('')}
+          </div>`).join('');
   },
 };
 
