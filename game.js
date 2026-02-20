@@ -290,6 +290,7 @@ function settle() {
   UI.render();
   UI.showBtns('settled');
   UI.renderLog();
+  saveSessionHistory();
 }
 
 function nextRound() {
@@ -450,6 +451,33 @@ function addLog(msg) {
 function esc(s)      {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
                   .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+const HISTORY_KEY = 'niuniu_history';
+const HISTORY_MAX = 3;
+
+function saveSessionHistory() {
+  try {
+    const item = {
+      date: new Date().toLocaleString('zh-CN', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' }),
+      rounds: G.roundLogs.slice()
+    };
+    let history = loadSessionHistory();
+    // 如果最近一次 date 相同则替换（同一 session 多次保存）
+    if (history.length > 0 && history[0].date === item.date) {
+      history[0] = item;
+    } else {
+      history.unshift(item);
+    }
+    if (history.length > HISTORY_MAX) history = history.slice(0, HISTORY_MAX);
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+  } catch(e) { /* localStorage 不可用时静默失败 */ }
+}
+
+function loadSessionHistory() {
+  try {
+    return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+  } catch(e) { return []; }
 }
 
 // ============================================================
