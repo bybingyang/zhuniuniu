@@ -82,6 +82,7 @@ function lb_start() {
   G.dealerIdx = 0;
   G.round     = 0;
   G.log       = [];
+  G.roundLogs = [];
   G.players[0].isDealer = true;
 
   el('lobby').classList.add('hidden');
