@@ -424,6 +424,18 @@ const UI = {
         <span class="rank-chips">💰 ${p.chips}</span>
       </div>`
     ).join('');
+
+    // 渲染本次完整日志（按局逆序）
+    const rounds = G.roundLogs.slice().reverse();
+    el('go-log').innerHTML = rounds.length === 0
+      ? '<p style="font-size:12px;color:#3d4f6a">暂无记录</p>'
+      : rounds.map(r => `
+          <div class="log-round-block" style="margin-bottom:10px">
+            <div class="log-round-header">第 ${r.round} 局 · 庄: ${esc(r.dealer)}</div>
+            ${r.entries.map(e => `<span class="log-entry">${esc(e)}</span>`).join('')}
+          </div>`).join('');
+
+    saveSessionHistory();   // 确保最终状态已保存
     el('game-over').classList.remove('hidden');
   },
 
