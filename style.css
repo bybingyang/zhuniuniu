@@ -436,13 +436,14 @@ body {
 
 /* ===== 游戏结束 ===== */
 .go-box {
-  position: relative; z-index: 1;
   background: #131820; border: 1px solid rgba(244,200,66,.25);
-  border-radius: 20px; padding: 36px 48px;
-  display: flex; flex-direction: column; align-items: center; gap: 20px;
   box-shadow: 0 0 60px rgba(0,0,0,.8);
 }
-.go-box h2 { font-size: 26px; color: var(--gold); }
+.go-box h2 { font-size: 18px; color: var(--gold); }
+.go-body {
+  padding: 16px 20px; overflow-y: auto; max-height: 75vh;
+  display: flex; flex-direction: column; gap: 14px;
+}
 #go-ranks { display: flex; flex-direction: column; gap: 8px; width: 100%; min-width: 240px; }
 .go-rank-row {
   display: flex; justify-content: space-between; gap: 24px;
