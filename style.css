@@ -451,3 +451,44 @@ body {
 }
 .rank-pos   { color: var(--gold); font-weight: 700; }
 .rank-chips { color: var(--green-win); }
+
+/* ===== 手机响应式（≤ 480px） ===== */
+@media (max-width: 480px) {
+  /* 缩小牌尺寸 */
+  :root {
+    --card-w: 30px;
+    --card-h: 43px;
+  }
+  .card { font-size: 10px; padding: 1px 2px; }
+  .card-top { font-size: 9px; }
+  .card-suit { font-size: 12px; }
+  .card-bot  { font-size: 9px; }
+  .card-slot-empty { width: var(--card-w); height: var(--card-h); }
+
+  /* 取消 scorecard 最小宽度限制 */
+  #scorecard { min-width: unset; }
+  #scorecard-wrap { padding: 8px 10px 4px; }
+
+  /* 压缩列宽 */
+  .col-name  { width: 60px; }
+  .col-type  { width: 52px; }
+  .col-delta { width: 46px; font-size: 12px; }
+  .col-chips { width: 52px; font-size: 12px; }
+
+  /* 表格字体 */
+  #scorecard tbody td { padding: 8px 6px; font-size: 12px; }
+  #scorecard thead th { padding: 8px 6px; font-size: 11px; }
+
+  /* 顶栏折叠 */
+  #top-bar { padding: 8px 12px; gap: 6px; }
+  .tb-title { font-size: 14px; }
+  #round-info { font-size: 12px; }
+  #dealer-info { font-size: 11px; padding: 2px 8px; }
+
+  /* 控制区 */
+  #controls { padding: 10px 12px 12px; }
+
+  /* 大厅 */
+  .game-title { font-size: 32px; letter-spacing: 4px; }
+  .lobby-inner { gap: 14px; }
+}

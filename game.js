@@ -24,6 +24,9 @@ const SUIT_RANK  = { '♠':4, '♥':3, '♦':2, '♣':1 };
 // 单张牌综合大小（面值优先，花色次之）
 function cardOrder(c) { return VALUE_RANK[c.v] * 10 + SUIT_RANK[c.s]; }
 
+const DEAL_INTERVAL_MS = 420;  // 发牌动画间隔
+const SETTLE_DELAY_MS  = 500;  // 最后一人发完到结算的延迟
+
 // ============================================================
 //  大厅
 // ============================================================
@@ -202,9 +205,9 @@ function startRound() {
       UI.render();                          // 实时显示当前已发玩家的牌
 
       if (idx === G.players.length - 1) {  // 最后一人发完后结算
-        setTimeout(settle, 500);
+        setTimeout(settle, SETTLE_DELAY_MS);
       }
-    }, idx * 420);
+    }, idx * DEAL_INTERVAL_MS);
   });
 }
 
@@ -270,7 +273,7 @@ function settle() {
     }
     const oldName = G.players[G.dealerIdx].name;
     G.players[G.dealerIdx].isDealer = false;
-    G.dealerIdx = newDealer.id;
+    G.dealerIdx = G.players.indexOf(newDealer);
     newDealer.isDealer = true;
     if (newDealer.name === oldName) {
       addLog(`🎖️ ${newDealer.name}【牛牛】继续坐庄`);
